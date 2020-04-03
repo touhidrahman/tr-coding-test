@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core'
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
-import { StockInfo } from '../models/stock-info'
-import { environment } from 'src/environments/environment'
+
 import { Observable } from 'rxjs'
+import { retry } from 'rxjs/operators'
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
+import { environment } from 'src/environments/environment'
+
+import { StockInfo } from '../models/stock-info'
 
 @Injectable({
     providedIn: 'root',
@@ -19,7 +22,8 @@ export class StockInfoService {
     }
 
     getInfoForISIN(): Observable<StockInfo> {
-        return this.stockSocket.asObservable().pipe()
+        // if the connection fails, retry 3 times before throwing error
+        return this.stockSocket.asObservable().pipe(retry(3))
     }
 
     stopDataStream(isin: string) {
