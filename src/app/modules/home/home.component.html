@@ -15,12 +15,42 @@
                     {{ isin }}
                 </div>
             </div>
+
+            <div class="mt-8">
+                <div class="flex">
+                    <input
+                        type="text"
+                        placeholder="Enter ISIN"
+                        [formControl]="newISIN"
+                        class="rounded-l-md w-full py-3 px-4 focus:outline-none shadow-md"
+                    />
+                    <button
+                        (click)="addInstrument()"
+                        class="bg-indigo-400 text-indigo-100 shadow-md rounded-r-md py-3 px-4 focus:outline-none"
+                    >
+                        Add
+                    </button>
+                </div>
+                <div class="text-red-800 text-sm" *ngIf="newISIN.invalid && newISIN.touched">
+                    ISIN incorrect!
+                </div>
+            </div>
         </div>
-        <div class="w-3/4 px-6">
+
+        <div class="w-3/4 px-6" *ngIf="selectedInstrument">
             <ng-container *ngIf="selectedInstrumentInfo$ | async as info">
-                <h1 class="text-gray-700 mb-8 tracking-tight font-semibold">
-                    {{ info.isin }}
-                </h1>
+                <div class="flex items-baseline justify-between">
+                    <h1 class="text-gray-600 text-2xl mb-8">
+                        {{ info.isin }}
+                    </h1>
+
+                    <button
+                        (click)="deleteInstrument(info.isin)"
+                        class="bg-transparent focus:outline-none text-red-700 border-b-2 border-transparent hover:border-red-700"
+                    >
+                        Delete
+                    </button>
+                </div>
                 <div class="grid grid-cols-3 gap-6">
                     <div
                         class="flex items-center justify-center flex-col bg-gray-100 rounded-md shadow-md py-3 px-4"
