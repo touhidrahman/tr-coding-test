@@ -1,10 +1,10 @@
 <main class="container mx-auto p-8">
-    <div class="flex -mx-6">
-        <div class="w-1/4 px-6">
-            <h2 class="text-indigo-400 mb-4 font-semibold text-lg tracking-tight">
-                My Instruments
-            </h2>
+    <h2 class="text-indigo-400 mb-4 font-semibold text-lg tracking-tight">
+        My Instruments
+    </h2>
 
+    <div class="md:flex -mx-6">
+        <div class="md:w-1/4 px-6">
             <div class="rounded-md bg-gray-100 shadow-md cursor-pointer">
                 <div
                     [ngClass]="{ 'bg-gray-300 font-semibold': selectedInstrument === isin }"
@@ -21,6 +21,7 @@
                     <input
                         type="text"
                         placeholder="Enter ISIN"
+                        (keyup.enter)="addInstrument()"
                         [formControl]="newISIN"
                         class="rounded-l-md w-full py-3 px-4 focus:outline-none shadow-md"
                     />
@@ -31,13 +32,16 @@
                         Add
                     </button>
                 </div>
-                <div class="text-red-800 text-sm" *ngIf="newISIN.invalid && newISIN.touched">
-                    ISIN incorrect!
+                <div
+                    class="text-red-800 text-sm pt-2"
+                    *ngIf="newISIN.value && newISIN.invalid && newISIN.touched"
+                >
+                    ISIN incorrect! Minimum 12 charecters.
                 </div>
             </div>
         </div>
 
-        <div class="w-3/4 px-6" *ngIf="selectedInstrument">
+        <div class="md:w-3/4 md:mt-0 mt-12 px-6" *ngIf="selectedInstrument">
             <ng-container *ngIf="selectedInstrumentInfo$ | async as info">
                 <div class="flex items-baseline justify-between">
                     <h1 class="text-gray-600 text-2xl mb-8">

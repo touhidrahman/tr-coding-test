@@ -17,7 +17,10 @@ export class HomeComponent implements OnInit {
     newISIN: FormControl
 
     constructor(private stockInfoService: StockInfoService) {
-        this.newISIN = new FormControl('', Validators.minLength(12))
+        this.newISIN = new FormControl(
+            null,
+            Validators.compose([Validators.required, Validators.minLength(12)]),
+        )
     }
 
     ngOnInit(): void {
@@ -35,11 +38,17 @@ export class HomeComponent implements OnInit {
     }
 
     addInstrument() {
-        if (this.newISIN.valid) {
-            this.instruments.push(this.newISIN.value)
-            this.newISIN.reset()
-        } else {
+        if (this.newISIN.invalid) {
             this.newISIN.markAllAsTouched()
+            return
+        }
+
+        if (this.newISIN.valid) {
+            const exists = this.instruments.indexOf(this.newISIN.value) > -1
+            if (!exists) {
+                this.instruments.push(this.newISIN.value)
+            }
+            this.newISIN.reset()
         }
     }
 
