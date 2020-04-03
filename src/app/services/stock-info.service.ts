@@ -18,7 +18,7 @@ export class StockInfoService {
         this.stockSocket.next({ subscribe: isin })
     }
 
-    getInfoForISIN(isin: string): Observable<StockInfo> {
+    getInfoForISIN(): Observable<StockInfo> {
         return this.stockSocket.asObservable().pipe()
     }
 

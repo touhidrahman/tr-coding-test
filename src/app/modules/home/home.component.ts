@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { StockInfoService } from 'src/app/services/stock-info.service'
+import { StockInfo } from 'src/app/models/stock-info'
+import { Observable } from 'rxjs'
 
 @Component({
     selector: 'app-home',
@@ -7,18 +9,23 @@ import { StockInfoService } from 'src/app/services/stock-info.service'
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+    instruments: string[] = ['DE000BASF111', 'DE000BASF112', 'DE000BASF113']
+    selectedInstrument: string
+    selectedInstrumentInfo$: Observable<StockInfo>
+
     constructor(private stockInfoService: StockInfoService) {}
 
     ngOnInit(): void {
-        this.stockInfoService.requestInfoForISIN('DE000BASF111')
-        this.stockInfoService
-            .getInfoForISIN('DE000BASF111')
-            .subscribe((data) => {
-                console.log('TCL: data :', data) // ! remove
-            })
+        this.selectedInstrumentInfo$ = this.stockInfoService.getInfoForISIN()
     }
 
-    stop() {
-        this.stockInfoService.stopDataStream('DE000BASF111')
+    onSelectISIN(isin: string) {
+        this.stockInfoService.stopDataStream(this.selectedInstrument)
+        this.selectedInstrument = isin
+        this.stockInfoService.requestInfoForISIN(isin)
+    }
+
+    stop(isin: string) {
+        this.stockInfoService.stopDataStream(isin)
     }
 }

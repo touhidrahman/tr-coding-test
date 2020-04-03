@@ -1,9 +1,50 @@
-<main class="container mx-auto px-12">
-    <div class="h-screen max-w-xs">
-        <div class="flex items-center justify-center">
-            <button class="bg-blue-600 text-gray-200 py-2 px-3 rounded-sm" (click)="stop()">
-                Stop
-            </button>
+<main class="container mx-auto p-8">
+    <div class="flex -mx-6">
+        <div class="w-1/4 px-6">
+            <h2 class="text-indigo-400 mb-4 font-semibold text-lg tracking-tight">
+                My Instruments
+            </h2>
+
+            <div class="rounded-md bg-gray-100 shadow-md cursor-pointer">
+                <div
+                    [ngClass]="{ 'bg-gray-300 font-semibold': selectedInstrument === isin }"
+                    class="py-3 px-4 text-base text-gray-600 border-b border-gray-400"
+                    (click)="onSelectISIN(isin)"
+                    *ngFor="let isin of instruments"
+                >
+                    {{ isin }}
+                </div>
+            </div>
+        </div>
+        <div class="w-3/4 px-6">
+            <ng-container *ngIf="selectedInstrumentInfo$ | async as info">
+                <h1 class="text-gray-700 mb-8 tracking-tight font-semibold">
+                    {{ info.isin }}
+                </h1>
+                <div class="grid grid-cols-3 gap-6">
+                    <div
+                        class="flex items-center justify-center flex-col bg-gray-100 rounded-md shadow-md py-3 px-4"
+                    >
+                        <p class="leading-none text-gray-600 pb-2">Price</p>
+                        <h1 class="text-4xl text-indigo-400">{{ info.price | currency: 'EUR' }}</h1>
+                    </div>
+                    <div
+                        class="flex items-center justify-center flex-col bg-gray-100 rounded-md shadow-md py-3 px-4"
+                    >
+                        <p class="leading-none text-gray-600 pb-2">Bid Price</p>
+                        <h1 class="text-4xl text-indigo-400">{{ info.bid | currency: 'EUR' }}</h1>
+                    </div>
+                    <div
+                        class="flex items-center justify-center flex-col bg-gray-100 rounded-md shadow-md py-3 px-4"
+                    >
+                        <p class="leading-none text-gray-600 pb-2">Asking Price</p>
+                        <h1 class="text-4xl text-indigo-400">{{ info.ask | currency: 'EUR' }}</h1>
+                    </div>
+                </div>
+            </ng-container>
         </div>
     </div>
 </main>
+
+<!-- Hack tailwind: whitelist classes -->
+<div class="hidden bg-gray-300 font-semibold"></div>
