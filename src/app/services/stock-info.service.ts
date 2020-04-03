@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
 import { StockInfo } from '../models/stock-info'
 import { environment } from 'src/environments/environment'
+import { Observable } from 'rxjs'
 
 @Injectable({
     providedIn: 'root',
@@ -14,10 +15,14 @@ export class StockInfoService {
     }
 
     requestInfoForISIN(isin: string) {
-        this.stockSocket.next({ subscribe: 'DE000BASF111' })
+        this.stockSocket.next({ subscribe: isin })
     }
 
-    getInfoForISIN(isin: string) {
-        return this.stockSocket.asObservable()
+    getInfoForISIN(isin: string): Observable<StockInfo> {
+        return this.stockSocket.asObservable().pipe()
+    }
+
+    stopDataStream(isin: string) {
+        this.stockSocket.next({ unsubscribe: isin })
     }
 }
